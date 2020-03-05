@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  postgres:
+    image: bitnami/postgres:11
+    environment:
+      POSTGRESQL_USERNAME: insecure_user
+      POSTGRESQL_PASSWORD: password123
+      POSTGRESQL_DATABASE: bank_records
+  rabbitmq:
+    image: bitnami/rabbitmq:3.8
+    ports:
+      - "5672"
+    environment:
+      RABBITMQ_USERNAME: insecure_user
+      RABBITMQ_PASSWORD: password1
+      RABBITMQ_NODE_PORT_NUMBER: 5672
+
