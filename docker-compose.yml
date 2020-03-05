@@ -1,17 +1,40 @@
 version: "3.7"
 services:
-  postgres:
-    image: bitnami/postgres:11
+  postgresql:
+    image: bitnami/postgresql:11
+    ports:
+      - "5432"
     environment:
       POSTGRESQL_USERNAME: insecure_user
       POSTGRESQL_PASSWORD: password123
       POSTGRESQL_DATABASE: bank_records
+      POSTGRESQL_MASTER_PORT_NUMBER: 5433
   rabbitmq:
     image: bitnami/rabbitmq:3.8
     ports:
       - "5672"
     environment:
       RABBITMQ_USERNAME: insecure_user
-      RABBITMQ_PASSWORD: password1
-      RABBITMQ_NODE_PORT_NUMBER: 5672
-
+      RABBITMQ_PASSWORD: password123
+      RABBITMQ_NODE_PORT_NUMBER: 5673
+  mongo:
+    image: bitnami/mongodb:4.0
+    ports:
+      - "27017"
+    environment:
+      MONGODB_USERNAME: insecure_user
+      MONGODB_PASSWORD: password123
+      MONGODB_DATABASE: cdm_store
+      MONGODB_PORT_NUMBER: 27018
+  ballerina_helloworld:
+    image: ballerina/ballerina:1.1.4
+    ports:
+      - "8080"
+    volumes:
+      - ./components/helloworld:/home/ballerina
+    command: ballerina run hello_world.bal
+    links:
+      - postgresql
+      - rabbitmq
+      - mongo
+    user: root # TODO: Can't access tmp directory as default user "ballerina" for some reason
