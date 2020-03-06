@@ -3,16 +3,18 @@ services:
   postgresql:
     image: bitnami/postgresql:11
     ports:
-      - "5433"
+      - "5433:5433"
     environment:
       POSTGRESQL_USERNAME: insecure_user
       POSTGRESQL_PASSWORD: password123
       POSTGRESQL_DATABASE: bank_records
-      POSTGRESQL_MASTER_PORT_NUMBER: 5433
+      POSTGRESQL_PORT_NUMBER: 5433
+    volumes:
+      - ./seed/postgresql:/docker-entrypoint-initdb.d
   rabbitmq:
     image: bitnami/rabbitmq:3.8
     ports:
-      - "5673"
+      - "5673:5673"
     environment:
       RABBITMQ_USERNAME: insecure_user
       RABBITMQ_PASSWORD: password123
@@ -20,7 +22,7 @@ services:
   mongo:
     image: bitnami/mongodb:4.0
     ports:
-      - "27018"
+      - "27018:27018"
     environment:
       MONGODB_USERNAME: insecure_user
       MONGODB_PASSWORD: password123
@@ -29,7 +31,7 @@ services:
   ballerina_helloworld:
     image: ballerina/ballerina:1.1.4
     ports:
-      - "8080"
+      - "8080:8080"
     volumes:
       - ./components/helloworld:/home/ballerina
     command: ballerina run hello_world.bal

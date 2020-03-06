@@ -1,0 +1,14 @@
+
+[project]
+org-name= "oneleg"
+version= "0.1.0"
+
+[platform]
+target = "java8"
+
+    [[platform.libraries]]
+    artafactId = "postgresql"
+    version = "42.2.10"
+    path = "./postgresql-42.2.10.jar"
+    groupId = "org.postgresql"
+    modules = ["watermark"]
