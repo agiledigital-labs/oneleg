@@ -1,5 +1,5 @@
 import ballerinax/java.jdbc;
-//import ballerina/runtime;
+import ballerina/runtime;
 import ballerina/io;
 import ballerina/jsonutils;
 import ballerina/time;
@@ -19,18 +19,21 @@ type Student record {
 };
 
 public function main() {
-      time:Time|error curWatermark = time:parse("2017-06-26T09:46:22.444-0500",
+  time:Time|error curWatermark = time:parse("0001-06-26T09:46:22.444-0500",
         "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
   while (true) {
-    io:println("\nThe select operation - Select data from a table");
-    var selectRet = testDB->select("SELECT * FROM student", Student);
+    runtime:sleep(2000);
+    var selectRet = testDB->select("SELECT * FROM student order by insertedTime", Student);
     
     if (selectRet is table<Student>) {
       json jsonConversionRet = jsonutils:fromTable(selectRet);
       foreach var item in selectRet {
-        io:println("Time: ", item.insertedTime);
-        if (item.insertedTime.time > time:currentTime().time){
-          io:println("New data from id: "+item.id.toString());
+        if (curWatermark is time:Time){
+          if (item.insertedTime.time > curWatermark.time){
+            curWatermark = item.insertedTime;
+            io:println("New data from id: "+item.id.toString());
+          }
         }
       }
     } else {
@@ -38,12 +41,4 @@ public function main() {
         <string>selectRet.detail()?.message);
     }
   }
-}
-
-function handleUpdate(jdbc:UpdateResult|jdbc:Error returned, string message) {
-    if (returned is jdbc:UpdateResult) {
-        io:println(message, " status: ", returned.updatedRowCount);
-    } else {
-        io:println(message, " failed: ", <string>returned.detail()?.message);
-    }
 }
