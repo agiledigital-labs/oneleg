@@ -9,6 +9,8 @@ services:
       POSTGRESQL_PASSWORD: password123
       POSTGRESQL_DATABASE: bank_records
       POSTGRESQL_PORT_NUMBER: 5433
+    volumes:
+      - ./seed/postgresql:/docker-entrypoint-initdb.d
   rabbitmq:
     image: bitnami/rabbitmq:3.8
     ports:
