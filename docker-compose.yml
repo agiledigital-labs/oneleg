@@ -15,6 +15,7 @@ services:
     image: bitnami/rabbitmq:3.8
     ports:
       - "5673:5673"
+      - "15672:15672"
     environment:
       RABBITMQ_USERNAME: insecure_user
       RABBITMQ_PASSWORD: password123

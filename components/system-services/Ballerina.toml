@@ -11,4 +11,4 @@ target = "java8"
     version = "42.2.10"
     path = "./postgresql-42.2.10.jar"
     groupId = "org.postgresql"
-    modules = ["watermark"]
+    modules = ["bank"]
